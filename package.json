@@ -1,0 +1,15 @@
+{
+  "name": "vaga",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mirza",
+  "license": "ISC",
+  "dependencies": {
+    "noble": "^1.9.1",
+    "noble-mac": "https://github.com/Timeular/noble-mac.git"
+  }
+}
