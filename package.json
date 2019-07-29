@@ -9,6 +9,7 @@
   "author": "Mirza",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "noble": "^1.9.1",
     "noble-mac": "https://github.com/Timeular/noble-mac.git"
   }
