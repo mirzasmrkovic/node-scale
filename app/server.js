@@ -39,7 +39,7 @@ let removeParticipant = (name) => {
   let scoreboard = getScoreboard()
   let participant = findParticipant(scoreboard, name)
   if(participant) {
-    scoreboard.splice(scoreboard.indexOf(participant))
+    scoreboard.splice(scoreboard.indexOf(participant), 1)
     writeToScoreboard({"scoreboard": scoreboard})
   }
 }
