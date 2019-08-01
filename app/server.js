@@ -1,12 +1,8 @@
-const fs = require('fs')
 const express = require('express')
 const app = express()
-const path = require('path')
-const router = express.Router()
 const port = 3000
 
-// app.use(express.static(__dirname + '/view'))
-router.get('/', (req,res) => { res.sendFile(__dirname + '/view' + '/index.html') })
+app.use(express.static('public'))
 
 // Load scoreboard
 let getScoreboard = () => {
@@ -15,6 +11,7 @@ let getScoreboard = () => {
   return scoreboard
 }
 
+const fs = require('fs')
 let writeToScoreboard = (scoreboard) => { fs.writeFile('scoreboard.json', JSON.stringify(scoreboard)) }
 app.get('/scoreboard', (req, res) => { res.send(getScoreboard()) })
 
@@ -82,5 +79,6 @@ app.get('/scoreboard/add/:name/:score/:date', (req, res) => {
   else res.send({"Reply": "Problems with adding score."})
 })
 
+const router = express.Router()
 app.use('/', router)
 app.listen(process.env.port || port)
