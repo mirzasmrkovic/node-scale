@@ -63,5 +63,24 @@ app.get('/scoreboard/remove/:name', (req, res) => {
   else return res.send({"Reply": "User " + data.name + " doesn't exists."})
 })
 
+// Add new score to a participant
+let addScore = (name, weight, date) => {
+  let scoreboard = getScoreboard()
+  let participant = findParticipant(scoreboard, name)
+  if (participant) {
+    let newScore = { "score" : weight, "date": date }
+    participant.score.push(newScore)
+    writeToScoreboard({"scoreboard": scoreboard})
+    return newScore
+  }
+  else return false
+}
+app.get('/scoreboard/add/:name/:score/:date', (req, res) => {
+  let data = req.params
+  let newScore = addScore(data.name, data.score, data.date)
+  if(newScore) res.send(newScore)
+  else res.send({"Reply": "Problems with adding score."})
+})
+
 app.use('/', router)
 app.listen(process.env.port || port)
