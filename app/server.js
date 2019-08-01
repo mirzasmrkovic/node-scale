@@ -14,24 +14,28 @@ let getScoreboard = () => {
   let {scoreboard} = JSON.parse(data)
   return scoreboard
 }
-let findParticipant = (scoreboard, name) => scoreboard.find(element => element.name === name)
-let writeToScoreboard = (scoreboard) => { fs.writeFile('scoreboard.json', JSON.stringify(scoreboard)) }
 
-let sendScoreboard = res => { res.send(getScoreboard()) }
-app.get('/scoreboard', (req, res) => { sendScoreboard(res) })
+let writeToScoreboard = (scoreboard) => { fs.writeFile('scoreboard.json', JSON.stringify(scoreboard)) }
+app.get('/scoreboard', (req, res) => { res.send(getScoreboard()) })
+
+let findParticipant = (scoreboard, name) => scoreboard.find(element => element.name === name)
 
 // Add new participant
 let addParticipant = (name) => {
   let scoreboard = getScoreboard()
   if(!findParticipant(scoreboard, name)) {
-    scoreboard.push({"name": name, "score": []})
+    let participant = {"name": name, "score": []}
+    scoreboard.push(participant)
     writeToScoreboard({"scoreboard": scoreboard})
+    return participant
   }
+  else return false
 }
 app.get('/scoreboard/add/:name', (req, res) => {
   let data = req.params
-  addParticipant(data.name)
-  sendScoreboard(res)
+  let participant = addParticipant(data.name)
+  if(participant) res.send(participant)
+  else res.send({"Reply": "User " + data.name + " already exists."})
 })
 
 // Remove existing participant
@@ -41,12 +45,15 @@ let removeParticipant = (name) => {
   if(participant) {
     scoreboard.splice(scoreboard.indexOf(participant), 1)
     writeToScoreboard({"scoreboard": scoreboard})
+    return participant
   }
+  else return false
 }
 app.get('/scoreboard/remove/:name', (req, res) => {
   let data = req.params
-  removeParticipant(data.name)
-  sendScoreboard(res)
+  let participant = removeParticipant(data.name)
+  if (participant) res.send(participant)
+  else return res.send({"Reply": "User " + data.name + " doesn't exists."})
 })
 
 app.use('/', router)
