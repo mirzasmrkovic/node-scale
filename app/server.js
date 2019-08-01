@@ -18,7 +18,14 @@ let getScoreboard = () => {
 let writeToScoreboard = (scoreboard) => { fs.writeFile('scoreboard.json', JSON.stringify(scoreboard)) }
 app.get('/scoreboard', (req, res) => { res.send(getScoreboard()) })
 
+// Get the information of an existing participant
 let findParticipant = (scoreboard, name) => scoreboard.find(element => element.name === name)
+app.get('/scoreboard/get/:name', (req, res) => {
+  let data = req.params
+  let participant = findParticipant(getScoreboard(), data.name)
+  if(participant) res.send(participant)
+  else res.send({"scoreboard": scoreboard})
+})
 
 // Add new participant
 let addParticipant = (name) => {
